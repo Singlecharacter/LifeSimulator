@@ -1,3 +1,5 @@
+public final SimulationSetup simSetup = new SimulationSetup();
+
 void setup()
 {
   fullScreen();
@@ -5,6 +7,8 @@ void setup()
   rectMode(CENTER);
   ellipseMode(CENTER);
   colorMode(RGB, MAX_RED, MAX_GREEN, MAX_BLUE);
+  
+  simSetup.SetupSimulation();
 }
 
 void draw()

@@ -10,6 +10,10 @@ public static class GameController
   
   private static int ticksPerTick = 1;
   
+  private static boolean removeAllObjects = false;
+  
+  private static ArrayList<GameObject> objectsToRemove = new ArrayList<GameObject>();
+  
   public static void RegisterObject(GameObject gameObject)
   {
     gameObjects.add(gameObject);
@@ -17,17 +21,25 @@ public static class GameController
   
   public static void RemoveObject(GameObject gameObject)
   {
-    gameObjects.remove(gameObject);
+    objectsToRemove.add(gameObject);
   }
   
   public static void RemoveAllObjects()
   {
-    gameObjects.clear();
+    removeAllObjects = true;
   }
   
   public static void Tick()
   {
     CleanupKeys();
+    
+    if(removeAllObjects)
+      gameObjects.clear();
+      
+    for(GameObject go : objectsToRemove)
+      gameObjects.remove(go);
+      
+    objectsToRemove.clear();
     
     for(int i = 0; i < ticksPerTick; i++)
     {

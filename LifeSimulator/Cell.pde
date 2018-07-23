@@ -42,31 +42,35 @@ public class Cell extends GameObject
   public void ChangeResource(int resource, float amount)
   {
     if(resource == RED_RESOURCE)
-    {
-      r += amount;
-      
-      if(r < 0F)
-        r = 0F;
-      else if(r > MAX_RED)
-        r = MAX_RED;
-    }
+      r = constrain(r + amount, 0F, MAX_RED);
     else if(resource == GREEN_RESOURCE)
-    {
-      g += amount;
-      
-      if(g < 0F)
-        g = 0F;
-      else if(g > MAX_GREEN)
-        g = MAX_GREEN;
-    }
+      g = constrain(g + amount, 0F, MAX_GREEN);
     else if(resource == BLUE_RESOURCE)
-    {
-      b += amount;
-      
-      if(b < 0F)
-        b = 0F;
-      else if(b > MAX_BLUE)
-        b = MAX_BLUE;
-    }
+      b = constrain(b + amount, 0F, MAX_BLUE);
+  }
+  
+  public void SetResource(int resource, float amount)
+  {
+    if(resource == RED_RESOURCE)
+      r = constrain(amount, 0F, MAX_RED);
+    else if(resource == GREEN_RESOURCE)
+      g = constrain(amount, 0F, MAX_GREEN);
+    else if(resource == BLUE_RESOURCE)
+      b = constrain(amount, 0F, MAX_BLUE);
+  }
+  
+  public void SetAllResources(float r, float g, float b)
+  {
+    this.r = constrain(r, 0F, MAX_RED);
+    this.g = constrain(g, 0F, MAX_GREEN);
+    this.b = constrain(b, 0F, MAX_BLUE);
+  }
+  
+  public float GetResource(int resource)
+  {
+    return resource == RED_RESOURCE ? r :
+           resource == GREEN_RESOURCE ? g :
+           resource == BLUE_RESOURCE ? b :
+           0;
   }
 }
