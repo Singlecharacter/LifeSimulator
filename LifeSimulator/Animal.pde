@@ -1,4 +1,4 @@
-public abstract class Animal extends GameObject
+public abstract class Animal extends TickableGameObject
 {
   protected final float maxHealth;
   protected float currentHealth;
@@ -208,5 +208,14 @@ public abstract class Animal extends GameObject
     
     //Delete self
     GameController.RemoveObject(this);
+  }
+  
+  public void Draw()
+  {
+    stroke(0F, 0F, 0F);
+    fill(MAX_RED, 0F, 0F);
+    rect(x, y - CELL_SIZE * 0.85F, CELL_SIZE, 4F);
+    fill(0F, MAX_GREEN, 0F);
+    rect(x, y - CELL_SIZE * 0.85F, CELL_SIZE * currentHealth / maxHealth, 4F);
   }
 }

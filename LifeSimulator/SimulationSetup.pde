@@ -2,7 +2,7 @@ public class SimulationSetup
 {  
   private final int numberOfNodes = 20;
   
-  private final int numberOfWalkers = 30;
+  private final int numberOfWalkers = 100;
   
   private final float noiseScale = 0.02F;
   
@@ -19,6 +19,30 @@ public class SimulationSetup
   
   private final float minNodeBStrength = MAX_BLUE * 0.05F;
   private final float maxNodeBStrength = MAX_BLUE * 0.45F;
+  
+  private final float minEatAmount = 5F;
+  private final float maxEatAmount = 35F;
+  
+  private final float minMinHealthyResourceMultiplier = 0.05F;
+  private final float maxMinHealthyResourceMultiplier = 0.25F;
+  
+  private final float minMaxHealthyResourceMultiplier = 1F;
+  private final float maxMaxHealthyResourceMultiplier = 1F;
+  
+  private final float minResourceDecreaseRate = 3F;
+  private final float maxResourceDecreaseRate = 20F;
+  
+  private final float minResourceDigestionRate = 0.25F;
+  private final float maxResourceDigestionRate = 1.5F;
+  
+  private final float minMaxHealth = 200F;
+  private final float maxMaxHealth = 700F;
+  
+  private final float minUnhealthyLossRate = 1F;
+  private final float maxUnhealthyLossRate = 2F;
+  
+  private final float minHealthyGainRate = 1F;
+  private final float maxHealthyGainRate = 2F;
   
   private final int generationMethod;
   
@@ -37,6 +61,7 @@ public class SimulationSetup
     GameController.RemoveAllObjects();
     
     new RestartObject();
+    new SimulationControlObject();
     
     for(int i = 0; i < MAP_WIDTH / CELL_SIZE; i++)
     {
@@ -147,8 +172,6 @@ public class SimulationSetup
     //Generate walkers
     for(int i = 0; i < numberOfWalkers; i++)
     {
-      Walker w = new Walker("Walker");
-      
       float walkerX = (int)random(0F, MAP_WIDTH);
       float walkerY = (int)random(0F, MAP_HEIGHT);
       
@@ -159,6 +182,16 @@ public class SimulationSetup
       adjustedY += CELL_SIZE / 2F;
       
       println("Spawning walker at: (" + adjustedX + "," + adjustedY + ")");
+      
+      Walker w = new Walker("Walker", random(minMinHealthyResourceMultiplier, maxMinHealthyResourceMultiplier) * MAX_RED, random(minMinHealthyResourceMultiplier, maxMinHealthyResourceMultiplier) * MAX_GREEN, random(minMinHealthyResourceMultiplier, maxMinHealthyResourceMultiplier) * MAX_BLUE,
+                                      random(minMaxHealthyResourceMultiplier, maxMaxHealthyResourceMultiplier) * MAX_RED, random(minMaxHealthyResourceMultiplier, maxMaxHealthyResourceMultiplier) * MAX_GREEN, random(minMaxHealthyResourceMultiplier, maxMaxHealthyResourceMultiplier) * MAX_BLUE,
+                                      random(minResourceDecreaseRate, maxResourceDecreaseRate), random(minResourceDecreaseRate, maxResourceDecreaseRate), random(minResourceDecreaseRate, maxResourceDecreaseRate),
+                                      random(minResourceDigestionRate, maxResourceDigestionRate), random(minResourceDigestionRate, maxResourceDigestionRate), random(minResourceDigestionRate, maxResourceDigestionRate),
+                                      random(minEatAmount, maxEatAmount),
+                                      random(minMaxHealth, maxMaxHealth),
+                                      random(minUnhealthyLossRate, maxUnhealthyLossRate),
+                                      random(minHealthyGainRate, maxHealthyGainRate),
+                                      (int)random(RED_RESOURCE, BLUE_RESOURCE + 1));
       
       w.SetPosition(adjustedX, adjustedY);
     }

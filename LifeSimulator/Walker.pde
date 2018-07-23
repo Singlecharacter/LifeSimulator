@@ -38,7 +38,7 @@ public class Walker extends Animal
     //No more edible resource, time to move
     if(map.GetCell(x, y).GetResource(desiredResource) <= 0F)
     {
-      int moveDirection = (int)random(NORTH, WEST);
+      int moveDirection = (int)random(NORTH, WEST + 1);
       
       switch(moveDirection)
       {
@@ -70,6 +70,8 @@ public class Walker extends Animal
   
   public void Draw()
   {
+    super.Draw();
+    
     stroke(0F, 0F, 0F);
     fill(r, g, b);
     ellipse(x, y, CELL_SIZE, CELL_SIZE);

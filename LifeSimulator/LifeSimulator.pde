@@ -20,6 +20,9 @@ void draw()
 
 void keyPressed()
 {
+  if(key == ' ')
+    GameController.ToggleCanTick();
+  else
     GameController.KeyPressed(keyCode);
 }
 

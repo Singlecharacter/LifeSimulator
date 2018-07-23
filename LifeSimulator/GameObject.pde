@@ -58,7 +58,5 @@ public abstract class GameObject
     return destroyed;
   }
   
-  public abstract void Tick();
-  
   public abstract void Draw();
 }

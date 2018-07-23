@@ -1,7 +1,7 @@
 static final float CELL_SIZE = 10F;
 static final int FRAMERATE = 144;
 
-static final boolean DRAW_GRIDLINES = true;
+static final boolean DRAW_GRIDLINES = false;
 
 static final int RED_RESOURCE = 0;
 static final int GREEN_RESOURCE = 1;
