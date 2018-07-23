@@ -20,9 +20,9 @@ public class SimulationSetup
   
   private final int generationMethod = NODES | NOISE;
   
-  private boolean runFirstSimulation = false;
-  
   private ArrayList<Cell> cells = new ArrayList<Cell>();
+  
+  private Map map;
   
   public void SetupSimulation()
   {
@@ -31,7 +31,7 @@ public class SimulationSetup
     
     new RestartObject();
     
-    runFirstSimulation = true;
+    map = new Map();
     
     for(int i = 0; i < MAP_WIDTH / CELL_SIZE; i++)
     {
@@ -43,6 +43,7 @@ public class SimulationSetup
         
         newCell.SetPosition(cellX, cellY);
         cells.add(newCell);
+        map.AddCell(newCell);
       }
     }
     
