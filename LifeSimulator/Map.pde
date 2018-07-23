@@ -2,9 +2,12 @@ public class Map
 {
   private HashMap<Integer, Cell> cells;
   
+  private ArrayList<Animal> animals;
+  
   public Map()
   {
     cells = new HashMap<Integer, Cell>();
+    animals = new ArrayList<Animal>();
   }
   
   public void AddCell(int index, Cell cell)
@@ -24,11 +27,16 @@ public class Map
   
   public Cell GetCell(int index)
   {
-    return cells.get(index);
+    return cells.containsKey(index) ? cells.get(index) : null;
   }
   
   public Cell GetCell(float x, float y)
   {
     return GetCell((((int)y / (int)CELL_SIZE) * (int)(MAP_WIDTH / CELL_SIZE)) + ((int)x / (int)CELL_SIZE));
+  }
+  
+  public void ClearMap()
+  {
+    cells.clear();
   }
 }

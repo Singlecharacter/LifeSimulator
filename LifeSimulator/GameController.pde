@@ -12,10 +12,6 @@ public static class GameController
   
   private static boolean canTick = true;
   
-  private static boolean removeAllObjects = false;
-  
-  private static ArrayList<GameObject> objectsToRemove = new ArrayList<GameObject>();
-  
   public static void RegisterObject(GameObject gameObject)
   {
     gameObjects.add(gameObject);
@@ -24,22 +20,27 @@ public static class GameController
   public static void RemoveObject(GameObject gameObject)
   {
     gameObjects.remove(gameObject);
+    gameObject.Destroy();
   }
   
   public static void RemoveAllObjects()
   {
-    gameObjects.clear();
+    while(gameObjects.size() > 0)
+      RemoveObject(gameObjects.get(0));
   }
   
   public static void Tick()
   {
-    for(int i = 0; i < ticksPerTick; i++)
+    if(canTick)
     {
-      for(int j = 0; j < gameObjects.size(); j++)
+      for(int i = 0; i < ticksPerTick; i++)
       {
-        GameObject go = gameObjects.get(j);
-        go.Tick();
-        go.Draw();
+        for(int j = 0; j < gameObjects.size(); j++)
+        {
+          GameObject go = gameObjects.get(j);
+          go.Tick();
+          go.Draw();
+        }
       }
     }
     

@@ -1,4 +1,6 @@
-public final SimulationSetup simSetup = new SimulationSetup();
+public final SimulationSetup simSetup = new SimulationSetup(NODES | NOISE);
+
+public Map map = new Map();
 
 void setup()
 {

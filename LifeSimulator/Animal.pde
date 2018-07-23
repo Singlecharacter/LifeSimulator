@@ -1,29 +1,37 @@
 public abstract class Animal extends GameObject
 {
-  protected float maxHealth, currentHealth;
+  protected final float maxHealth;
+  protected float currentHealth;
   
-  protected float minHealthyR, minHealthyG, minHealthyB,
-                  maxHealthyR, maxHealthyG, maxHealthyB;
+  protected final float minHealthyR, minHealthyG, minHealthyB,
+                        maxHealthyR, maxHealthyG, maxHealthyB;
                   
-  protected float unhealthyLossRate, healthyGainRate;
+  protected final int desiredResource;
+  
+  protected final float rDigestionRate, gDigestionRate, bDigestionRate;
+  
+  protected final float eatAmount;
+                  
+  protected final float unhealthyLossRate, healthyGainRate;
                 
   protected float r, g, b;
                   
-  protected float rDecreaseRate, gDecreaseRate, bDecreaseRate;
+  protected final float rDecreaseRate, gDecreaseRate, bDecreaseRate;
   
   protected boolean isDying;
+  protected boolean canEat;
                 
   public Animal()
   {
     super();
     
-    minHealthyR = 0F;
-    minHealthyG = 0F;
-    minHealthyB = 0F;
+    minHealthyR = MAX_RED * 0.25F;
+    minHealthyG = MAX_GREEN * 0.25F;
+    minHealthyB = MAX_BLUE * 0.25F;
     
-    maxHealthyR = MAX_RED;
-    maxHealthyG = MAX_GREEN;
-    maxHealthyB = MAX_BLUE;
+    maxHealthyR = MAX_RED * 0.75F;
+    maxHealthyG = MAX_GREEN * 0.75F;
+    maxHealthyB = MAX_BLUE * 0.75F;
     
     rDecreaseRate = 1F;
     gDecreaseRate = 1F;
@@ -36,15 +44,24 @@ public abstract class Animal extends GameObject
     healthyGainRate = 1F;
     
     isDying = false;
+    canEat = true;
+    
+    desiredResource = RED_RESOURCE;
+    
+    rDigestionRate = 1F;
+    gDigestionRate = 1F;
+    bDigestionRate = 1F;
+    
+    eatAmount = 5F;
   }
   
   public Animal(String name)
   {
     super(name);
     
-    minHealthyR = 0F;
-    minHealthyG = 0F;
-    minHealthyB = 0F;
+    minHealthyR = MAX_RED * 0.25F;
+    minHealthyG = MAX_GREEN * 0.25F;
+    minHealthyB = MAX_BLUE * 0.25F;
     
     maxHealthyR = MAX_RED;
     maxHealthyG = MAX_GREEN;
@@ -61,13 +78,26 @@ public abstract class Animal extends GameObject
     healthyGainRate = 1F;
     
     isDying = false;
+    canEat = true;
+    
+    desiredResource = RED_RESOURCE;
+    
+    rDigestionRate = 1F;
+    gDigestionRate = 1F;
+    bDigestionRate = 1F;
+    
+    eatAmount = 5F;
   }
   
   public Animal(String name, float minHealthyR, float minHealthyG, float minHealthyB, 
                              float maxHealthyR, float maxHealthyG, float maxHealthyB,
                              float rDecreaseRate, float gDecreaseRate, float bDecreaseRate,
+                             float rDigestionRate, float gDigestionRate, float bDigestionRate,
+                             float eatAmount,
                              float maxHealth,
-                             float unhealthyLossRate)
+                             float unhealthyLossRate,
+                             float healthyGainRate,
+                             int desiredResource)
   {
     super(name);
     
@@ -87,8 +117,18 @@ public abstract class Animal extends GameObject
     currentHealth = maxHealth;
     
     this.unhealthyLossRate = unhealthyLossRate;
+    this.healthyGainRate = healthyGainRate;
     
     isDying = false;
+    canEat = true;
+    
+    this.desiredResource = desiredResource;
+    
+    this.rDigestionRate = rDigestionRate;
+    this.gDigestionRate = gDigestionRate;
+    this.bDigestionRate = bDigestionRate;
+    
+    this.eatAmount = eatAmount;
   }
   
   public void Tick()
@@ -105,31 +145,52 @@ public abstract class Animal extends GameObject
     g = constrain(g - gDecreaseRate, 0F, MAX_GREEN);
     b = constrain(b - bDecreaseRate, 0F, MAX_BLUE);
     
+    if(canEat)
+    {
+      float amountEaten = 0F;
+      
+      if(map.GetCell(x, y).GetResource(desiredResource) >= eatAmount)
+      {
+        map.GetCell(x, y).ChangeResource(desiredResource, -eatAmount);
+        
+        amountEaten = eatAmount;
+      }
+      else
+      {
+        amountEaten = map.GetCell(x, y).GetResource(desiredResource);
+        map.GetCell(x, y).ChangeResource(desiredResource, -amountEaten);
+      }
+      
+      r = constrain(r + (amountEaten * rDigestionRate), 0F, MAX_RED);
+      g = constrain(g + (amountEaten * gDigestionRate), 0F, MAX_GREEN);
+      b = constrain(b + (amountEaten * bDigestionRate), 0F, MAX_BLUE);
+    }
+    
     if(r >= minHealthyR && r <= maxHealthyR)
     {
-      currentHealth = constrain(currentHealth - unhealthyLossRate, 0F, maxHealth);
+      currentHealth = constrain(currentHealth + healthyGainRate, 0F, maxHealth);
     }
     else
     {
-      currentHealth = constrain(currentHealth + healthyGainRate, 0F, maxHealth);
+      currentHealth = constrain(currentHealth - unhealthyLossRate, 0F, maxHealth);
     }
     
     if(g >= minHealthyG && g <= maxHealthyG)
     {
-      currentHealth = constrain(currentHealth - unhealthyLossRate, 0F, maxHealth);
+      currentHealth = constrain(currentHealth + healthyGainRate, 0F, maxHealth);
     }
     else
     {
-      currentHealth = constrain(currentHealth + healthyGainRate, 0F, maxHealth);
+      currentHealth = constrain(currentHealth - unhealthyLossRate, 0F, maxHealth);
     }
     
     if(b >= minHealthyB && b <= maxHealthyB)
     {
-      currentHealth = constrain(currentHealth - unhealthyLossRate, 0F, maxHealth);
+      currentHealth = constrain(currentHealth + healthyGainRate, 0F, maxHealth);
     }
     else
     {
-      currentHealth = constrain(currentHealth + healthyGainRate, 0F, maxHealth);
+      currentHealth = constrain(currentHealth - unhealthyLossRate, 0F, maxHealth);
     }
     
     if(currentHealth == 0F)
@@ -140,6 +201,12 @@ public abstract class Animal extends GameObject
   
   public void DyingTick()
   {
+    //Dump resources into underlying cell
+    map.GetCell(x, y).ChangeResource(RED_RESOURCE, r);
+    map.GetCell(x, y).ChangeResource(GREEN_RESOURCE, g);
+    map.GetCell(x, y).ChangeResource(BLUE_RESOURCE, b);
+    
+    //Delete self
     GameController.RemoveObject(this);
   }
 }

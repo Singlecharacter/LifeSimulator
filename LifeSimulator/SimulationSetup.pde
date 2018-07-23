@@ -2,6 +2,8 @@ public class SimulationSetup
 {  
   private final int numberOfNodes = 20;
   
+  private final int numberOfWalkers = 30;
+  
   private final float noiseScale = 0.02F;
   
   private final float minNodeRadius = 100F;
@@ -18,20 +20,23 @@ public class SimulationSetup
   private final float minNodeBStrength = MAX_BLUE * 0.05F;
   private final float maxNodeBStrength = MAX_BLUE * 0.45F;
   
-  private final int generationMethod = NODES | NOISE;
+  private final int generationMethod;
   
   private ArrayList<Cell> cells = new ArrayList<Cell>();
   
-  private Map map;
+  public SimulationSetup(int generationMethod)
+  {
+    this.generationMethod = generationMethod;
+  }
   
   public void SetupSimulation()
   {
-    GameController.RemoveAllObjects();
+    map.ClearMap();
     cells.clear();
     
-    new RestartObject();
+    GameController.RemoveAllObjects();
     
-    map = new Map();
+    new RestartObject();
     
     for(int i = 0; i < MAP_WIDTH / CELL_SIZE; i++)
     {
@@ -137,6 +142,25 @@ public class SimulationSetup
       println("Average R after nodes: " + totalR / cells.size());
       println("Average G after nodes: " + totalG / cells.size());
       println("Average B after nodes: " + totalB / cells.size());
+    }
+    
+    //Generate walkers
+    for(int i = 0; i < numberOfWalkers; i++)
+    {
+      Walker w = new Walker("Walker");
+      
+      float walkerX = (int)random(0F, MAP_WIDTH);
+      float walkerY = (int)random(0F, MAP_HEIGHT);
+      
+      float adjustedX = (int)walkerX - ((int)walkerX) % (int)CELL_SIZE;
+      adjustedX += CELL_SIZE / 2F;
+      
+      float adjustedY = (int)walkerY - ((int)walkerY) % (int)CELL_SIZE;
+      adjustedY += CELL_SIZE / 2F;
+      
+      println("Spawning walker at: (" + adjustedX + "," + adjustedY + ")");
+      
+      w.SetPosition(adjustedX, adjustedY);
     }
   }
 }

@@ -2,6 +2,8 @@ public abstract class GameObject
 {
   public final String name;
   
+  private boolean destroyed;
+  
   protected float x, y;
   
   public GameObject()
@@ -10,12 +12,14 @@ public abstract class GameObject
     this.x = 0;
     this.y = 0;
     GameController.RegisterObject(this);
+    destroyed = false;
   }
   
   public GameObject(String name)
   {
     this.name = name;
     GameController.RegisterObject(this);
+    destroyed = false;
   }
   
   public void SetX(float value)
@@ -42,6 +46,16 @@ public abstract class GameObject
   {
     this.x = x;
     this.y = y;
+  }
+  
+  public void Destroy()
+  {
+    destroyed = true;
+  }
+  
+  public boolean Destroyed()
+  {
+    return destroyed;
   }
   
   public abstract void Tick();

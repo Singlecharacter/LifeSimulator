@@ -16,3 +16,8 @@ static final float MAX_BLUE = 1000F;
 
 static final int NOISE = 1;
 static final int NODES = 2;
+
+static final int NORTH = 0;
+static final int EAST = 1;
+static final int SOUTH = 2;
+static final int WEST = 3;
