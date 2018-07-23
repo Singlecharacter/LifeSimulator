@@ -15,6 +15,16 @@ public static class GameController
     gameObjects.add(gameObject);
   }
   
+  public static void RemoveObject(GameObject gameObject)
+  {
+    gameObjects.remove(gameObject);
+  }
+  
+  public static void RemoveAllObjects()
+  {
+    gameObjects.clear();
+  }
+  
   public static void Tick()
   {
     CleanupKeys();
@@ -71,6 +81,8 @@ public static class GameController
   {
     return keysReleased.containsKey(key);
   }
+  
+  //Private methods
   
   private static void CleanupKeys()
   {

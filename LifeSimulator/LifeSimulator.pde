@@ -4,6 +4,7 @@ void setup()
   frameRate(FRAMERATE);
   rectMode(CENTER);
   ellipseMode(CENTER);
+  colorMode(RGB, MAX_RED, MAX_GREEN, MAX_BLUE);
 }
 
 void draw()
