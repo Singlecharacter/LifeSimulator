@@ -7,16 +7,18 @@ public class SimulationSetup
   private final float minNodeRadius = 100F;
   private final float maxNodeRadius = 500F;
   
+  private final float noiseMultiplier = 0.75F;
+  
   private final float minNodeRStrength = MAX_RED * 0.05F;
-  private final float maxNodeRStrength = MAX_RED * 0.75F;
+  private final float maxNodeRStrength = MAX_RED * 0.45F;
   
   private final float minNodeGStrength = MAX_GREEN * 0.05F;
-  private final float maxNodeGStrength = MAX_GREEN * 0.75F;
+  private final float maxNodeGStrength = MAX_GREEN * 0.45F;
   
   private final float minNodeBStrength = MAX_BLUE * 0.05F;
-  private final float maxNodeBStrength = MAX_BLUE * 0.75F;
+  private final float maxNodeBStrength = MAX_BLUE * 0.45F;
   
-  private final int generationMethod = NOISE;
+  private final int generationMethod = NODES | NOISE;
   
   private boolean runFirstSimulation = false;
   
@@ -67,9 +69,9 @@ public class SimulationSetup
       {
         Cell currentCell = cells.get(i);
         
-        float redAmount = noise((rNoiseStartX + currentCell.GetX()) * noiseScale, (rNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_RED;
-        float greenAmount = noise((gNoiseStartX + currentCell.GetX()) * noiseScale, (gNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_GREEN;
-        float blueAmount = noise((bNoiseStartX + currentCell.GetX()) * noiseScale, (bNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_BLUE;
+        float redAmount = noise((rNoiseStartX + currentCell.GetX()) * noiseScale, (rNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_RED * noiseMultiplier;
+        float greenAmount = noise((gNoiseStartX + currentCell.GetX()) * noiseScale, (gNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_GREEN * noiseMultiplier;
+        float blueAmount = noise((bNoiseStartX + currentCell.GetX()) * noiseScale, (bNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_BLUE * noiseMultiplier;
         
         currentCell.ChangeResource(RED_RESOURCE, redAmount);
         currentCell.ChangeResource(GREEN_RESOURCE, greenAmount);

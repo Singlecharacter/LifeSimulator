@@ -29,7 +29,10 @@ public class Cell extends GameObject
   public void Draw()
   {
     fill(r, g, b);
-    stroke(r, g, b);
+    if(DRAW_GRIDLINES)
+      stroke(0F, 0F, 0F);
+    else
+      stroke(r, g, b);
     
     rect(x, y, CELL_SIZE, CELL_SIZE);
   }
