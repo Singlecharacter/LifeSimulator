@@ -1,4 +1,6 @@
-public final SimulationSetup simSetup = new SimulationSetup();
+public final SimulationSetup simSetup = new SimulationSetup(NODES | NOISE);
+
+public Map map = new Map();
 
 void setup()
 {
@@ -18,6 +20,9 @@ void draw()
 
 void keyPressed()
 {
+  if(key == ' ')
+    GameController.ToggleCanTick();
+  else
     GameController.KeyPressed(keyCode);
 }
 

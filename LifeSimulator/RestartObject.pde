@@ -1,4 +1,4 @@
-public class RestartObject extends GameObject
+public class RestartObject extends TickableGameObject
 {
   public void Tick()
   {
