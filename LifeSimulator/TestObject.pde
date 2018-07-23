@@ -28,6 +28,6 @@ public class TestObject extends GameObject
   
   public void Draw()
   {
-    
+    rect(x - CELL_SIZE / 2F, y - CELL_SIZE / 2F, CELL_SIZE, CELL_SIZE);
   }
 }

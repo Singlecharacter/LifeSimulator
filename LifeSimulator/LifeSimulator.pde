@@ -1,11 +1,9 @@
 void setup()
 {
   fullScreen();
-  frameRate(144);
+  frameRate(FRAMERATE);
   rectMode(CENTER);
   ellipseMode(CENTER);
-  
-  new TestObject("Object 1");
 }
 
 void draw()

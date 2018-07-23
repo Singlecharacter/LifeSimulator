@@ -8,6 +8,8 @@ public static class GameController
   
   private static HashMap<Integer, Boolean> keysReleased = new HashMap<Integer, Boolean>();
   
+  private static int ticksPerTick = 1;
+  
   public static void RegisterObject(GameObject gameObject)
   {
     gameObjects.add(gameObject);
@@ -17,13 +19,26 @@ public static class GameController
   {
     CleanupKeys();
     
-    for(GameObject go : gameObjects)
+    for(int i = 0; i < ticksPerTick; i++)
     {
-      go.Tick();
-      go.Draw();
+      for(GameObject go : gameObjects)
+      {
+        go.Tick();
+        go.Draw();
+      }
     }
     
     UpdateKeys();
+  }
+  
+  public static void SetTicksPerTick(int ticks)
+  {
+    ticksPerTick = ticks;
+  }
+  
+  public static int GetTicksPerTick()
+  {
+    return ticksPerTick;
   }
   
   public static void KeyPressed(int key)
