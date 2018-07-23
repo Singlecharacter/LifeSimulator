@@ -2,13 +2,15 @@ public static class GameController
 {
   private static ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
   
-  private static HashMap<Integer, Boolean> keysHeld = new HashMap<Integer, Boolean>();
+  private static ArrayList<Integer> keysHeld = new ArrayList<Integer>();
   
-  private static HashMap<Integer, Boolean> keysPressed = new HashMap<Integer, Boolean>();
+  private static ArrayList<Integer> keysPressed = new ArrayList<Integer>();
   
-  private static HashMap<Integer, Boolean> keysReleased = new HashMap<Integer, Boolean>();
+  private static ArrayList<Integer> keysReleased = new ArrayList<Integer>();
   
   private static int ticksPerTick = 1;
+  
+  private static boolean canTick = true;
   
   private static boolean removeAllObjects = false;
   
@@ -21,36 +23,27 @@ public static class GameController
   
   public static void RemoveObject(GameObject gameObject)
   {
-    objectsToRemove.add(gameObject);
+    gameObjects.remove(gameObject);
   }
   
   public static void RemoveAllObjects()
   {
-    removeAllObjects = true;
+    gameObjects.clear();
   }
   
   public static void Tick()
   {
-    CleanupKeys();
-    
-    if(removeAllObjects)
-      gameObjects.clear();
-      
-    for(GameObject go : objectsToRemove)
-      gameObjects.remove(go);
-      
-    objectsToRemove.clear();
-    
     for(int i = 0; i < ticksPerTick; i++)
     {
-      for(GameObject go : gameObjects)
+      for(int j = 0; j < gameObjects.size(); j++)
       {
+        GameObject go = gameObjects.get(j);
         go.Tick();
         go.Draw();
       }
     }
     
-    UpdateKeys();
+    CleanupKeys();
   }
   
   public static void SetTicksPerTick(int ticks)
@@ -65,66 +58,45 @@ public static class GameController
   
   public static void KeyPressed(int key)
   {
-    if(!keysHeld.containsKey(key))
+    if(!keysHeld.contains(key))
     {
-      keysPressed.put(key, false);
+      keysPressed.add(key);
+      keysHeld.add(key);
     }
-    
-    keysHeld.put(key, true);
   }
   
   public static void KeyReleased(int key)
   {
-    keysReleased.put(key, false);
-    keysHeld.remove(key);
+    keysReleased.add(key);
   }
   
   public static boolean IsKeyPressed(int key)
   {
-    return keysPressed.containsKey(key);
+    return keysPressed.contains(key);
   }
   
   public static boolean IsKeyHeld(int key)
   {
-    return keysHeld.containsKey(key);
+    return keysHeld.contains(key);
   }
   
   public static boolean IsKeyReleased(int key)
   {
-    return keysReleased.containsKey(key);
+    return keysReleased.contains(key);
   }
   
   //Private methods
   
   private static void CleanupKeys()
   {
-    for(int key : keysPressed.keySet())
+    keysPressed.clear();
+    
+    for(int i = 0; i < keysHeld.size(); i++)
     {
-      if(keysPressed.get(key))
-      {
-        keysPressed.remove(key);
-      }
+      if(keysReleased.contains(keysHeld.get(i)))
+        keysHeld.remove(i);
     }
     
-    for(int key : keysReleased.keySet())
-    {
-      if(keysReleased.get(key))
-      {
-        keysReleased.remove(key);
-      }
-    }
-  }
-  
-  private static void UpdateKeys()
-  {
-    for(int key : keysPressed.keySet())
-    {
-      keysPressed.put(key, true);
-    }
-    
-    for(int key : keysReleased.keySet())
-    {
-      keysReleased.put(key, true);
-    }
+    keysReleased.clear();
   }
 }

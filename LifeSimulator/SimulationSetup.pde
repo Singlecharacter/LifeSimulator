@@ -1,7 +1,5 @@
 public class SimulationSetup
-{
-  private ArrayList<ResourceNode> nodes = new ArrayList<ResourceNode>();
-  
+{  
   private final int numberOfNodes = 20;
   
   private final float noiseScale = 0.02F;
@@ -18,15 +16,6 @@ public class SimulationSetup
   private final float minNodeBStrength = MAX_BLUE * 0.05F;
   private final float maxNodeBStrength = MAX_BLUE * 0.75F;
   
-  private final float gNoiseStartX = random(10000F);
-  private final float gNoiseStartY = random(10000F);
-  
-  private final float rNoiseStartX = random(10000F);
-  private final float rNoiseStartY = random(10000F);
-  
-  private final float bNoiseStartX = random(10000F);
-  private final float bNoiseStartY = random(10000F);
-  
   private final int generationMethod = NOISE;
   
   private boolean runFirstSimulation = false;
@@ -35,12 +24,12 @@ public class SimulationSetup
   
   public void SetupSimulation()
   {
-    if(runFirstSimulation)
-      GameController.RemoveAllObjects();
-    
-    runFirstSimulation = true;
+    GameController.RemoveAllObjects();
+    cells.clear();
     
     new RestartObject();
+    
+    runFirstSimulation = true;
     
     for(int i = 0; i < MAP_WIDTH / CELL_SIZE; i++)
     {
@@ -49,8 +38,6 @@ public class SimulationSetup
         Cell newCell = new Cell("Cell");
         float cellX = ((float)i) * CELL_SIZE + CELL_SIZE / 2F;
         float cellY = ((float)j) * CELL_SIZE + CELL_SIZE / 2F;
-        
-        println("Creating cell at: (" + cellX + "," + cellY + ")");
         
         newCell.SetPosition(cellX, cellY);
         cells.add(newCell);
@@ -65,6 +52,15 @@ public class SimulationSetup
     
     if((generationMethod & NOISE) == NOISE)
     {
+      float gNoiseStartX = random(10000F);
+      float gNoiseStartY = random(10000F);
+  
+      float rNoiseStartX = random(10000F);
+      float rNoiseStartY = random(10000F);
+  
+      float bNoiseStartX = random(10000F);
+      float bNoiseStartY = random(10000F);
+      
       println("Generating using noise...");
       
       for(int i = 0; i < cells.size(); i++)
@@ -74,13 +70,6 @@ public class SimulationSetup
         float redAmount = noise((rNoiseStartX + currentCell.GetX()) * noiseScale, (rNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_RED;
         float greenAmount = noise((gNoiseStartX + currentCell.GetX()) * noiseScale, (gNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_GREEN;
         float blueAmount = noise((bNoiseStartX + currentCell.GetX()) * noiseScale, (bNoiseStartY + currentCell.GetY()) * noiseScale) * MAX_BLUE;
-        
-        if(i == 0)
-        {
-          println("R: " + redAmount);
-          println("G: " + greenAmount);
-          println("B: " + blueAmount);
-        }
         
         currentCell.ChangeResource(RED_RESOURCE, redAmount);
         currentCell.ChangeResource(GREEN_RESOURCE, greenAmount);
@@ -98,6 +87,8 @@ public class SimulationSetup
     
     if((generationMethod & NODES) == NODES)
     {
+      ArrayList<ResourceNode> nodes = new ArrayList<ResourceNode>();
+      
       println("Generating using " + numberOfNodes + " nodes...");
       
       for(int i = 0; i < numberOfNodes; i++)

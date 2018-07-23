@@ -18,7 +18,7 @@ void draw()
 
 void keyPressed()
 {
-  GameController.KeyPressed(keyCode);
+    GameController.KeyPressed(keyCode);
 }
 
 void keyReleased()

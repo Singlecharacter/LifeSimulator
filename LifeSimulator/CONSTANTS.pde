@@ -1,4 +1,4 @@
-static final float CELL_SIZE = 5F;
+static final float CELL_SIZE = 10F;
 static final int FRAMERATE = 144;
 
 static final int RED_RESOURCE = 0;
